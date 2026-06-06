@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+        *{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Segoe UI',sans-serif;
+}
+
+body{
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    overflow:hidden;
+    background:linear-gradient(135deg,#ff8fb1,#ffc2d6,#ffe5ec);
+}
+
+.card{
+    width:90%;
+    max-width:500px;
+    background:white;
+    padding:35px;
+    border-radius:25px;
+    text-align:center;
+    box-shadow:0 15px 35px rgba(0,0,0,.15);
+    animation:fadeIn .8s ease;
+    z-index:10;
+}
+
+.hidden{
+    display:none;
+}
+
+h1{
+    color:#ff4d88;
+    margin-bottom:15px;
+}
+
+p{
+    color:#555;
+    margin-bottom:20px;
+    line-height:1.6;
+}
+
+.gif{
+    font-size:90px;
+    margin-bottom:10px;
+    animation:bounce 1.5s infinite;
+}
+
+.buttons{
+    display:flex;
+    justify-content:center;
+    gap:15px;
+    margin-top:20px;
+}
+
+button{
+    border:none;
+    padding:12px 28px;
+    border-radius:40px;
+    font-size:18px;
+    cursor:pointer;
+    transition:.3s;
+}
+
+.yes{
+    background:#ff4d88;
+    color:white;
+}
+
+.yes:hover{
+    transform:scale(1.08);
+}
+
+.no{
+    background:#e9e9e9;
+    color:#444;
+    position:relative;
+}
+
+input[type="date"]{
+    width:100%;
+    padding:12px;
+    border:2px solid #ffb3c6;
+    border-radius:12px;
+    font-size:16px;
+    margin-top:15px;
+}
+
+.confirm{
+    margin-top:20px;
+    background:#ff4d88;
+    color:white;
+}
+
+.hearts{
+    position:absolute;
+    inset:0;
+    overflow:hidden;
+    pointer-events:none;
+}
+
+.heart{
+    position:absolute;
+    bottom:-50px;
+    font-size:22px;
+    animation:float linear infinite;
+    opacity:.8;
+}
+
+@keyframes float{
+    from{
+        transform:translateY(0);
+        opacity:0;
+    }
+    20%{
+        opacity:1;
+    }
+    to{
+        transform:translateY(-120vh);
+        opacity:0;
+    }
+}
+
+@keyframes bounce{
+    0%,100%{transform:translateY(0);}
+    50%{transform:translateY(-10px);}
+}
+
+@keyframes fadeIn{
+    from{
+        opacity:0;
+        transform:translateY(20px);
+    }
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+}
+
+#resultDate{
+    font-size:22px;
+    color:#ff4d88;
+    font-weight:bold;
+    margin-top:15px;
+}
+    </style>
+
+</head>
+
+<body>
+    
+<div class="hearts" id="hearts"></div>
+
+<!-- PAGE 1 -->
+<div class="card" id="page1">
+    <div class="gif">🐻❤️</div>
+
+    <h1>Hey There ❤️</h1>
+
+    <p>
+        I have something important to ask...
+    </p>
+
+    <h2 style="color:#ff4d88;">
+        Will you go on a date with me?
+    </h2>
+
+    <div class="buttons">
+        <button class="yes" id="yesBtn">
+            YES 💕
+        </button>
+
+        <button class="no" id="noBtn">
+            NO 😢
+        </button>
+    </div>
+</div>
+
+<!-- PAGE 2 -->
+<div class="card hidden" id="page2">
+    <div class="gif">🥰</div>
+
+    <h1>YAYYY!! 💖</h1>
+
+    <p>Choose our date:</p>
+
+    <input type="date" id="dateInput">
+
+    <button class="confirm" id="confirmBtn">
+        Continue ❤️
+    </button>
+</div>
+
+<!-- PAGE 3 -->
+<div class="card hidden" id="page3">
+    <div class="gif">🎉</div>
+
+    <h1>Date Confirmed!</h1>
+
+    <p>See you on:</p>
+
+    <div id="resultDate"></div>
+
+    <p style="margin-top:20px;">
+        I'm looking forward to it! 💕
+    </p>
+</div>
+
+    <script>
+        // Floating Hearts
+const heartsContainer = document.getElementById("hearts");
+
+function createHeart(){
+    const heart = document.createElement("div");
+
+    heart.classList.add("heart");
+    heart.innerHTML = ["❤️","💕","💖","💗"][Math.floor(Math.random()*4)];
+
+    heart.style.left = Math.random()*100 + "%";
+    heart.style.animationDuration = (5 + Math.random()*5) + "s";
+
+    heartsContainer.appendChild(heart);
+
+    setTimeout(()=>{
+        heart.remove();
+    },10000);
+}
+
+setInterval(createHeart,300);
+
+// Pages
+const page1 = document.getElementById("page1");
+const page2 = document.getElementById("page2");
+const page3 = document.getElementById("page3");
+
+const yesBtn = document.getElementById("yesBtn");
+const noBtn = document.getElementById("noBtn");
+
+const confirmBtn = document.getElementById("confirmBtn");
+const dateInput = document.getElementById("dateInput");
+const resultDate = document.getElementById("resultDate");
+
+// Yes button
+yesBtn.addEventListener("click",()=>{
+
+    page1.classList.add("hidden");
+    page2.classList.remove("hidden");
+
+    // Simple confetti effect
+    for(let i=0;i<100;i++){
+        let confetti=document.createElement("div");
+
+        confetti.innerHTML="🎉";
+        confetti.style.position="fixed";
+        confetti.style.left=Math.random()*100+"vw";
+        confetti.style.top="-20px";
+        confetti.style.fontSize="20px";
+        confetti.style.pointerEvents="none";
+        confetti.style.transition="3s linear";
+
+        document.body.appendChild(confetti);
+
+        setTimeout(()=>{
+            confetti.style.transform=
+            'translateY(${window.innerHeight+100}px) rotate(720deg)';
+        },10);
+
+        setTimeout(()=>{
+            confetti.remove();
+        },3000);
+    }
+});
+
+// Moving NO button
+noBtn.addEventListener("click", (e) => {
+
+    e.preventDefault();
+
+    const randomX = Math.random() *
+        (window.innerWidth - noBtn.offsetWidth);
+
+    const randomY = Math.random() *
+        (window.innerHeight - noBtn.offsetHeight);
+
+    noBtn.style.position = "fixed";
+    noBtn.style.left = randomX + "px";
+    noBtn.style.top = randomY + "px";
+});
+
+
+// Confirm date
+confirmBtn.addEventListener("click",()=>{
+
+    if(dateInput.value===""){
+        alert("Please choose a date ❤️");
+        return;
+    }
+
+    page2.classList.add("hidden");
+    page3.classList.remove("hidden");
+
+    const selected =
+    new Date(dateInput.value);
+
+    resultDate.textContent =
+    selected.toDateString();
+});
+    </script>
+</body>
+</html>
